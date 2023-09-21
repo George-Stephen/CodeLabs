@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
  # Create a function to create an email from the first letter of first name and surname
 def create_email(student_name):
@@ -24,8 +25,13 @@ def create_email(student_name):
 
 # Create a function to create a list of emails from a list of names
 def create_email_list(excel_file):
+
     try:
-        df = pd.read_excel(excel_file)
+        # df = pd.read_excel(excel_file)
+        xls = pd.ExcelFile(excel_file)
+        sheet_names = xls.sheet_names
+        df_list = [xls.parse(sheet_name) for sheet_name in sheet_names]
+        df = pd.concat(df_list, ignore_index=True)
         print('Excel file is successfully opened')
     except Exception as e:
         print(f"Error loading excel file: {e}")
@@ -43,7 +49,7 @@ def create_email_list(excel_file):
                     email += str(np.random.randint(10))
                 unique_emails.append(email)
                 seen_emails.add(email)
-                
+
     return unique_emails
             # print('Student names:', student_names)
             # print('Email list:', email_list)
